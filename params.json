@@ -1,0 +1,8 @@
+{
+  "setup1": {
+    "seeds": 2,
+    "energy": 1,
+    "particle": "e-",
+    "histories": 1000
+  }
+}
