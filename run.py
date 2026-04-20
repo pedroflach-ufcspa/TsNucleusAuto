@@ -1,6 +1,7 @@
 import subprocess
 import time
 import os
+from datetime import datetime
 import Utils as utils
 
 # ============================================================
@@ -23,6 +24,16 @@ RUN_FILE = "ExampleNucleusDNADamage.txt"
 # Necessário para evitar erro: libG4Tree.so not found
 GEANT4_LIB = "/home/pedro/Documentos/ic/GEANT4/geant4-install/lib"
 GEANT4_SETUP = "/home/pedro/Documentos/ic/GEANT4/geant4-install/bin/geant4.sh"
+
+# Arquivo de log
+LOG_FILE = "simulation_log.txt"
+
+
+def log_event(message: str, log_file: str = LOG_FILE) -> None:
+    """Append log messages with timestamp to a text file."""
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    with open(log_file, "a", encoding="utf-8") as file:
+        file.write(f"[{timestamp}] {message}\n")
 
 
 # ============================================================
@@ -66,6 +77,7 @@ simulations = utils.read_param_file("params")
 cur_seed = 0
 successful_simulations = 0
 tries = 0
+last_setup = None
 
 # ============================================================
 # MAIN LOOP
@@ -76,8 +88,21 @@ for name, params in simulations.items():
     seeds = params["seeds"]
     energy = params["energy"]
     particle = params["particle"]
+    histories = params["histories"]
+    current_setup = (energy, particle, histories)
 
     print(f"\nStarting simulation for scenario: {name}")
+    if current_setup != last_setup:
+        log_event("=" * 70)
+        log_event("SETUP CHANGED")
+        log_event(f"SCENARIO={name}")
+        log_event(f"ENERGY={energy} MeV | PARTICLE={particle} | HISTORIES={histories}")
+        log_event("=" * 70)
+        last_setup = current_setup
+    else:
+        log_event(f"SCENARIO={name} | setup unchanged")
+
+    log_event(f"START SCENARIO | target_successful_seeds={seeds}")
     time.sleep(1)
 
     while successful_simulations < seeds:
@@ -87,7 +112,7 @@ for name, params in simulations.items():
             "seeds": cur_seed,
             "energy": energy,
             "particle": particle,
-            "histories": params["histories"]
+            "histories": histories
         }
 
         utils.update_parameters(simulation_params)
@@ -97,6 +122,7 @@ for name, params in simulations.items():
 
         tries += 1
         print(f"Starting simulation for seed {cur_seed} (try {tries})...")
+        log_event(f"RUN | scenario={name} | seed={cur_seed} | try={tries}")
         time.sleep(2)
 
         # Comando TOPAS
@@ -120,6 +146,7 @@ for name, params in simulations.items():
 
         if outcome:
             print("Simulation successful. Moving output files...")
+            log_event(f"SUCCESS | scenario={name} | seed={cur_seed} | try={tries}")
 
             include_list = [
                 "DNADamage.phsp",
@@ -139,6 +166,7 @@ for name, params in simulations.items():
 
         else:
             print("Simulation crashed. Saving problematic seed...")
+            log_event(f"CRASH | scenario={name} | seed={cur_seed} | try={tries}")
             utils.save_problematic_seed(cur_seed, particle)
 
         cur_seed += 1
@@ -147,6 +175,9 @@ for name, params in simulations.items():
     print(f"\nFinished scenario: {name}")
     print(f"Total tries: {tries}")
     print(f"Successful simulations: {successful_simulations}")
+    log_event(
+        f"END SCENARIO | name={name} | total_tries={tries} | successful_simulations={successful_simulations}"
+    )
 
     # Reset counters for next scenario
     cur_seed = 0
@@ -154,3 +185,4 @@ for name, params in simulations.items():
     tries = 0
 
 print("\nAll simulations finished.")
+log_event("ALL SIMULATIONS FINISHED")
