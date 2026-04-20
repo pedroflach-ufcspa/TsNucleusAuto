@@ -34,6 +34,8 @@ index 354f5dde679b75d228cd7a3107355d36a8e83b70..7537b4321023475ed756e9de675dccc2
  GEANT4_LIB = "/home/pedro/Documentos/ic/GEANT4/geant4-install/lib"
 -GEANT4_SETUP = "/home/pedro/Documentos/ic/GEANT4/geant4-install/bin/geant4.sh"
 +GEANT4_SETUP = "/home/pedro/Documentos/ic/GEANT4/geant4-install/bin/geant4.sh"
+
+#Arquivo Log
 +LOG_FILE = "simulation_log.txt"
 +
 +
