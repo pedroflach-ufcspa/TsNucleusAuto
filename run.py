@@ -57,7 +57,7 @@ for line in result.stdout.splitlines():
     env[key] = value
 
     # ============================================================
-    # FORCE GEANT4 DATA VARIABLES (CRITICAL)
+    # FORCE GEANT4 DATA VARIABLES
     # ============================================================
 
     GEANT4_DATA_DIR = "/home/pedro/Documentos/ic/GEANT4/G4DATA"
@@ -132,8 +132,8 @@ for name, params in simulations.items():
         process = subprocess.Popen(
             cmd,
             shell=True,
-            cwd=RUN_DIR,   # <<< ESSENCIAL (resolve supportFiles)
-            env=env        # <<< ESSENCIAL (resolve libG4Tree.so)
+            cwd=RUN_DIR,   
+            env=env        
         )
 
         process.wait()
