@@ -153,3 +153,14 @@ def yieldByTimeMultipleScenarios(dfs: dict[str, pd.DataFrame], molecule: str, st
     plt.ylabel("Yield")
     plt.title(f"{molecule} yield for multiple scenarios")
     plt.show()
+# ============================================================
+# EXECUÇÃO
+# ============================================================
+
+DIR_PATH = "/home/pedro/PycharmProjects/TsNucleusAuto/outputs/setup2_1_e-"
+FILE_NAME = "DNADamage"  # troque pelo nome do arquivo de química quando tiver
+
+df = getDataframe(FILE_NAME, DIR_PATH)
+print(getMolecules(df))
+
+yieldByTimeSingleMolecule(df, molecule="OH", log=True)
