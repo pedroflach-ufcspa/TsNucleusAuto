@@ -2,6 +2,22 @@ import matplotlib.pyplot as plt
 
 import Utils as utils
 
+# ============================================================
+# CAMINHO DOS OUTPUTS
+# ============================================================
+
+path = "/home/pedro/Downloads/outputs/setup1_1_e-"
+file_name = "DNADamage"
+n_seeds = 2  # quantas seeds você tem
+dose = 1.0
+
+damage = get_damage(path, file_name, seeds=n_seeds, dose=dose)
+get_damage_info(damage)
+plot_full_damage_with_error(damage)
+
+def get_total_damage(df: utils.pd.DataFrame, dose: float = 1.0) -> dict[str, float]:
+    
+# ============================================================
 def get_damage(path: str, file_name: str, seeds: int = 3, dose: float = 1.0) -> dict[str, dict]:
 
     """
@@ -37,20 +53,7 @@ def get_damage(path: str, file_name: str, seeds: int = 3, dose: float = 1.0) -> 
     return result_with_error
 
 
-# ============================================================
-# EXECUÇÃO
-# ============================================================
 
-path = "/home/pedro/Downloads/outputs/setup1_1_e-"
-file_name = "DNADamage"
-n_seeds = 2  # quantas seeds você tem
-dose = 1.0
-
-damage = get_damage(path, file_name, seeds=n_seeds, dose=dose)
-get_damage_info(damage)
-plot_full_damage_with_error(damage)
-
-def get_total_damage(df: utils.pd.DataFrame, dose: float = 1.0) -> dict[str, float]:
 
     """
     Return the damage yield per Gy
