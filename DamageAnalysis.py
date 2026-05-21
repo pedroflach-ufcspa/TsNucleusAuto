@@ -71,7 +71,7 @@ def get_total_damage(df: utils.pd.DataFrame, dose: float = 1.0) -> dict[str, flo
         "Indirect SSBs": df["SSBs_Indirect"].sum(),
         "Direct DSBs": df["DSBs_Direct"].sum(),
         "Indirect DSBs": df["DSBs_Indirect"].sum(),
-        "Ratio": df["SSBs"].sum() / df["DSBs"].sum()
+        "Ratio": df["DSBs"].sum() / df["SSBs"].sum()
     }
 
 def get_damage_info(data: dict) -> None:
